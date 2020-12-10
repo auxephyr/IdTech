@@ -1,0 +1,3 @@
+[submodule "lib/Saxxon.Common"]
+	path = lib/Saxxon.Common
+	url = git@github.com:SaxxonPike/Saxxon.Common.git
