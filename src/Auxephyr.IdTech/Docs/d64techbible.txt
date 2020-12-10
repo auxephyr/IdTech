@@ -1,0 +1,37 @@
+===========================================================================
+Title                   : Doom 64 Tech Bible
+Filename                : doom64_techbible-1.pdf
+Release date            : 2011-05-22 (initial revision)
+Author                  : Samuel "Kaiser" Villarreal
+Email Address           : [redacted]
+Other Files By Author   : Too numerous to list
+Misc. Author Info       : Software Engineer at Nightdive Studios
+
+Description             : This is the Tech Bible for Doom 64, covering
+                          technical aspects of Midway's Doom game for
+                          the Nintendo 64, as well as differences to the
+                          original Doom (II) engine and data formats.
+
+Additional Credits to   : Frans "Xymph" de Vries for compiling this .txt and
+                          uploading; James "Quasar" Haley for a helping hand
+===========================================================================
+
+* Copyright / Permissions *
+
+Authors MAY NOT use the contents of this file as a base for
+modification or reuse.  Permissions have been obtained from original
+authors for any of their resources modified or included in this file.
+
+You MAY distribute this file, provided you include this text
+file, with no modifications.  You may distribute this file in any
+electronic format (BBS, Diskette, CD, etc) as long as you include
+this file intact.  I have received permission from the original
+authors of any modified or included content in this file to allow
+further distribution.
+
+* Where to get the file that this text file describes *
+
+The Usual: ftp://archives.gamers.org/pub/idgames/ and mirrors
+Web sites:
+FTP sites:
+

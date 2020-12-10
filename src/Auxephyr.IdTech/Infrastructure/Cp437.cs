@@ -68,7 +68,7 @@ namespace Auxephyr.IdTech.Infrastructure
         {
             Assert.IsNotNull(text, "Text cannot be null.");
             var buffer = new byte[length];
-            Array.Copy(text, buffer, Math.Min(length, buffer.Length));
+            Array.Copy(text, buffer, Math.Min(text.Length, buffer.Length));
             return buffer;
         }
     }
