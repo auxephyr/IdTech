@@ -1,20 +1,21 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 
 namespace Auxephyr.IdTech.Infrastructure
 {
-    public static class Log
+    public class Log : ILog
     {
-        public static TextWriter Target { get; set; }
+        public static ILog Default { get; } = new Log();
+        
+        public TextWriter Target { get; set; }
 
-        public static void Write(params object[] messages)
+        public void Write(params object[] messages)
         {
             if (Target == null)
                 return;
 
-            foreach (var message in messages)
-                Target.WriteLineAsync(JsonSerializer.Serialize(message));
+            foreach (var obj in messages)
+                Target.WriteLineAsync(obj is string str ? str : JsonSerializer.Serialize(obj));
         }
     }
 }
