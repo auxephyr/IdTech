@@ -3,9 +3,9 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Model]
-    public struct DoomVertex
+    public class UdmfVertex
     {
-        public short X;
-        public short Y;
+        public double X;
+        public double Y;
     }
 }

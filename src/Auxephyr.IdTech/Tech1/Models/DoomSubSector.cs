@@ -3,9 +3,9 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Model]
-    public struct DoomVertex
+    public struct DoomSubSector
     {
-        public short X;
-        public short Y;
+        public short SegCount;
+        public short StartSeg;
     }
 }

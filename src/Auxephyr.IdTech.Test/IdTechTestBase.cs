@@ -8,7 +8,7 @@ using Saxxon.TestInfrastructure;
 
 namespace Auxephyr.IdTech
 {
-    public class IdTechTestBase : TestBase
+    public abstract class IdTechTestBase : TestBase
     {
         [SetUp, Obsolete]
         public void SetUpIdTechTestBase()
@@ -21,6 +21,8 @@ namespace Auxephyr.IdTech
                         TestContext.Out.WriteLine(obj is string s ? s : JsonSerializer.Serialize(obj));
                 });
         }
+
+        protected ILog Log => Mock<ILog>().Object;
         
         protected Stream OpenData(params string[] path)
         {
