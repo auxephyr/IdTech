@@ -8,16 +8,16 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     {
         public static IDoomLumpSerializer Default { get; } =
             new DoomLumpSerializer(
-                DoomLinedefSerializer.Default,
-                DoomBlockMapSerializer.Default);
+                DoomLinedefsSerializer.Default,
+                DoomBlockmapSerializer.Default);
 
-        public DoomLumpSerializer(IDoomLinedefSerializer linedefs, IDoomBlockMapSerializer blockMap)
+        public DoomLumpSerializer(IDoomLinedefsSerializer linedefs, IDoomBlockmapSerializer blockmap)
         {
             Linedefs = linedefs;
-            BlockMap = blockMap;
+            Blockmap = blockmap;
         }
 
-        public IDoomLinedefSerializer Linedefs { get; }
-        public IDoomBlockMapSerializer BlockMap { get; }
+        public IDoomLinedefsSerializer Linedefs { get; }
+        public IDoomBlockmapSerializer Blockmap { get; }
     }
 }

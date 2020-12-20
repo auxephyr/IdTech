@@ -12,15 +12,15 @@ namespace Auxephyr.IdTech.Tech1.Lumps
         
         public List<Lump> Read(IEnumerable<Lump> lumps, IEnumerable<string> names)
         {
-            var validNames = names.ToArray();
+            var validNames = names.Select(n => n.ToUpper()).ToArray();
 
             var existingLumps = lumps
-                .SkipWhile(l => l.Name != validNames[0])
-                .TakeWhile(l => validNames.Contains(l.Name))
+                .SkipWhile(l => l.Name.ToUpper() != validNames[0])
+                .TakeWhile(l => validNames.Contains(l.Name.ToUpper()))
                 .ToList();
 
             return validNames
-                .Select(name => existingLumps.FirstOrDefault(l => l.Name == name)
+                .Select(name => existingLumps.FirstOrDefault(l => l.Name.ToUpper() == name)
                                 ?? new Lump {Name = name, Data = Array.Empty<byte>()})
                 .ToList();
         }
@@ -65,11 +65,5 @@ namespace Auxephyr.IdTech.Tech1.Lumps
                     lumps.Add(new Lump {Name = mapLump.Name, Data = mapLump.Data.ToArray()});
             }
         }
-    }
-
-    public interface IMapGroupSerializer
-    {
-        public List<Lump> Read(IEnumerable<Lump> lumps, IEnumerable<string> names);
-        public void Write(IList<Lump> lumps, IEnumerable<Lump> map);
     }
 }

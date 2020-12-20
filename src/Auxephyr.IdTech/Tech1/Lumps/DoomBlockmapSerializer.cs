@@ -4,9 +4,9 @@ using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
 {
-    public class DoomBlockMapSerializer : IDoomBlockMapSerializer
+    public class DoomBlockmapSerializer : IDoomBlockmapSerializer
     {
-        public static IDoomBlockMapSerializer Default { get; } = new DoomBlockMapSerializer();
+        public static IDoomBlockmapSerializer Default { get; } = new DoomBlockmapSerializer();
 
         public List<DoomBlock> Decode(byte[] data)
         {

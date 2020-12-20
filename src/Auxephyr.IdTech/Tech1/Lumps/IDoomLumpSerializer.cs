@@ -2,7 +2,7 @@
 {
     public interface IDoomLumpSerializer
     {
-        IDoomLinedefSerializer Linedefs { get; }
-        IDoomBlockMapSerializer BlockMap { get; }
+        IDoomLinedefsSerializer Linedefs { get; }
+        IDoomBlockmapSerializer Blockmap { get; }
     }
 }

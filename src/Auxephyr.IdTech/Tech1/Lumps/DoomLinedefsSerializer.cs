@@ -4,9 +4,9 @@ using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
 {
-    public class DoomLinedefSerializer : IDoomLinedefSerializer
+    public class DoomLinedefsSerializer : IDoomLinedefsSerializer
     {
-        public static IDoomLinedefSerializer Default { get; } = new DoomLinedefSerializer();
+        public static IDoomLinedefsSerializer Default { get; } = new DoomLinedefsSerializer();
         
         public List<DoomLinedef> Decode(byte[] data)
         {

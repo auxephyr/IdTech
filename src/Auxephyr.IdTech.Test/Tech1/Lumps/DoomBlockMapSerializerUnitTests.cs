@@ -12,7 +12,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
         public void Decode_ShouldDecodeBlockMap()
         {
             // Arrange.
-            var subject = Create<DoomBlockMapSerializer>();
+            var subject = Create<DoomBlockmapSerializer>();
             var data = new byte[]
             {
                 0x00, 0x01,
@@ -44,7 +44,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
         public void Encode_ShouldEncodeBlockMap()
         {
             // Arrange.
-            var subject = Create<DoomBlockMapSerializer>();
+            var subject = Create<DoomBlockmapSerializer>();
             var blocks = new List<DoomBlock>
             {
                 new DoomBlock {X = 0x0100, Y = 0x0302, Width = 0x0504, Height = 0x0706},

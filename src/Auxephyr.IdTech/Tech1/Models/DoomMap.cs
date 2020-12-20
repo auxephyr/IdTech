@@ -6,7 +6,7 @@ namespace Auxephyr.IdTech.Tech1.Models
     [Model]
     public class DoomMap
     {
-        public string Name { get; set; }
+        public Lump Id { get; set; }
         public List<DoomThing> Things { get; set; }
         public List<DoomLinedef> Linedefs { get; set; }
         public List<DoomSidedef> Sidedefs { get; set; }
@@ -16,6 +16,6 @@ namespace Auxephyr.IdTech.Tech1.Models
         public List<DoomNode> Nodes { get; set; }
         public List<DoomSector> Sectors { get; set; }
         public List<DoomReject> Rejects { get; set; }
-        public List<DoomBlock> BlockMap { get; set; }
+        public List<DoomBlock> Blocks { get; set; }
     }
 }

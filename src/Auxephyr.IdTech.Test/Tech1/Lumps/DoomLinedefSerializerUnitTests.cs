@@ -12,7 +12,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
         public void Decode_ShouldDecodeLinedefs()
         {
             // Arrange.
-            var subject = Create<DoomLinedefSerializer>();
+            var subject = Create<DoomLinedefsSerializer>();
             var data = new byte[]
             {
                 0x00, 0x01, 
