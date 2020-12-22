@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Auxephyr.IdTech.Infrastructure;
 using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
@@ -8,31 +10,30 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     {
         public static IDoomNodesSerializer Default { get; } = new DoomNodesSerializer();
         
-        public List<DoomNode> Decode(byte[] data)
+        public List<DoomNode> Decode(ReadOnlySpan<byte> data)
         {
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
+            var offset = 0;
             var count = data.Length / 28;
-            var result = new List<DoomNode>();
+            var result = new List<DoomNode>(count);
 
             for (var i = 0; i < count; i++)
             {
                 var node = new DoomNode
                 {
-                    X = reader.ReadInt16(),
-                    Y = reader.ReadInt16(),
-                    DeltaX = reader.ReadInt16(),
-                    DeltaY = reader.ReadInt16(),
-                    RightYUpperBound = reader.ReadInt16(),
-                    RightYLowerBound = reader.ReadInt16(),
-                    RightXLowerBound = reader.ReadInt16(),
-                    RightXUpperBound = reader.ReadInt16(),
-                    LeftYUpperBound = reader.ReadInt16(),
-                    LeftYLowerBound = reader.ReadInt16(),
-                    LeftXLowerBound = reader.ReadInt16(),
-                    LeftXUpperBound = reader.ReadInt16(),
-                    RightChild = reader.ReadInt16(),
-                    LeftChild = reader.ReadInt16()
+                    X = SpanStream.ReadInt16(data, ref offset),
+                    Y = SpanStream.ReadInt16(data, ref offset),
+                    DeltaX = SpanStream.ReadInt16(data, ref offset),
+                    DeltaY = SpanStream.ReadInt16(data, ref offset),
+                    RightYUpperBound = SpanStream.ReadInt16(data, ref offset),
+                    RightYLowerBound = SpanStream.ReadInt16(data, ref offset),
+                    RightXLowerBound = SpanStream.ReadInt16(data, ref offset),
+                    RightXUpperBound = SpanStream.ReadInt16(data, ref offset),
+                    LeftYUpperBound = SpanStream.ReadInt16(data, ref offset),
+                    LeftYLowerBound = SpanStream.ReadInt16(data, ref offset),
+                    LeftXLowerBound = SpanStream.ReadInt16(data, ref offset),
+                    LeftXUpperBound = SpanStream.ReadInt16(data, ref offset),
+                    RightChild = SpanStream.ReadInt16(data, ref offset),
+                    LeftChild = SpanStream.ReadInt16(data, ref offset)
                 };
                 
                 result.Add(node);
@@ -41,31 +42,30 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             return result;
         }
 
-        public byte[] Encode(IEnumerable<DoomNode> nodes)
+        public byte[] Encode(ICollection<DoomNode> nodes)
         {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
-
+            var data = new byte[nodes.Count * 28];
+            var offset = 0;
+            
             foreach (var node in nodes)
             {
-                writer.Write(node.X);
-                writer.Write(node.Y);
-                writer.Write(node.DeltaX);
-                writer.Write(node.DeltaY);
-                writer.Write(node.RightYUpperBound);
-                writer.Write(node.RightYLowerBound);
-                writer.Write(node.RightXLowerBound);
-                writer.Write(node.RightXUpperBound);
-                writer.Write(node.LeftYUpperBound);
-                writer.Write(node.LeftYLowerBound);
-                writer.Write(node.LeftXLowerBound);
-                writer.Write(node.LeftXUpperBound);
-                writer.Write(node.RightChild);
-                writer.Write(node.LeftChild);
+                SpanStream.Write(data, ref offset, node.X);
+                SpanStream.Write(data, ref offset, node.Y);
+                SpanStream.Write(data, ref offset, node.DeltaX);
+                SpanStream.Write(data, ref offset, node.DeltaY);
+                SpanStream.Write(data, ref offset, node.RightYUpperBound);
+                SpanStream.Write(data, ref offset, node.RightYLowerBound);
+                SpanStream.Write(data, ref offset, node.RightXLowerBound);
+                SpanStream.Write(data, ref offset, node.RightXUpperBound);
+                SpanStream.Write(data, ref offset, node.LeftYUpperBound);
+                SpanStream.Write(data, ref offset, node.LeftYLowerBound);
+                SpanStream.Write(data, ref offset, node.LeftXLowerBound);
+                SpanStream.Write(data, ref offset, node.LeftXUpperBound);
+                SpanStream.Write(data, ref offset, node.RightChild);
+                SpanStream.Write(data, ref offset, node.LeftChild);
             }
-            
-            writer.Flush();
-            return stream.ToArray();
+
+            return data;
         }
     }
 }

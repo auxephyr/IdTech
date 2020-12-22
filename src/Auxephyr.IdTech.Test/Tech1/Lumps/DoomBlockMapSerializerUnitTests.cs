@@ -29,8 +29,8 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             };
             var expected = new List<DoomBlock>
             {
-                new DoomBlock {X = 0x0100, Y = 0x0302, Width = 0x0504, Height = 0x0706},
-                new DoomBlock {X = 0x0908, Y = 0x0B0A, Width = 0x0D0C, Height = 0x0F0E}
+                new() {X = 0x0100, Y = 0x0302, Width = 0x0504, Height = 0x0706},
+                new() {X = 0x0908, Y = 0x0B0A, Width = 0x0D0C, Height = 0x0F0E}
             };
             
             // Act.
@@ -47,8 +47,8 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             var subject = Create<DoomBlockmapSerializer>();
             var blocks = new List<DoomBlock>
             {
-                new DoomBlock {X = 0x0100, Y = 0x0302, Width = 0x0504, Height = 0x0706},
-                new DoomBlock {X = 0x0908, Y = 0x0B0A, Width = 0x0D0C, Height = 0x0F0E}
+                new() {X = 0x0100, Y = 0x0302, Width = 0x0504, Height = 0x0706},
+                new() {X = 0x0908, Y = 0x0B0A, Width = 0x0D0C, Height = 0x0F0E}
             };
             var expected = new byte[]
             {

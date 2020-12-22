@@ -26,9 +26,9 @@ namespace Auxephyr.IdTech.Tech1
 
             var expected = new List<WadEntry>
             {
-                new WadEntry {Name = "TWAVC0", Offset = 0x0116BB74, Length = 0x00000168},
-                new WadEntry {Name = "THITA0", Offset = 0x0116BCDC, Length = 0x000003E8},
-                new WadEntry {Name = "THITB0", Offset = 0x0116C0C4, Length = 0x000007D4}
+                new() {Name = "TWAVC0", Offset = 0x0116BB74, Length = 0x00000168},
+                new() {Name = "THITA0", Offset = 0x0116BCDC, Length = 0x000003E8},
+                new() {Name = "THITB0", Offset = 0x0116C0C4, Length = 0x000007D4}
             };
 
             // Act.

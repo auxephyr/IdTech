@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using Auxephyr.IdTech.Infrastructure;
 using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
@@ -7,39 +8,37 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     public class DoomVertexesSerializer : IDoomVertexesSerializer
     {
         public static IDoomVertexesSerializer Default { get; } = new DoomVertexesSerializer();
-        
-        public List<DoomVertex> Decode(byte[] data)
+
+        public List<DoomVertex> Decode(ReadOnlySpan<byte> data)
         {
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
             var count = data.Length / 4;
-            var result = new List<DoomVertex>();
+            var result = new List<DoomVertex>(count);
+            var offset = 0;
 
             for (var i = 0; i < count; i++)
             {
                 result.Add(new DoomVertex
                 {
-                    X = reader.ReadInt16(),
-                    Y = reader.ReadInt16()
+                    X = SpanStream.ReadInt16(data, ref offset),
+                    Y = SpanStream.ReadInt16(data, ref offset)
                 });
             }
 
             return result;
         }
 
-        public byte[] Encode(IEnumerable<DoomVertex> vertices)
+        public byte[] Encode(ICollection<DoomVertex> vertices)
         {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
+            var data = new byte[vertices.Count * 4];
+            var offset = 0;
 
             foreach (var vertex in vertices)
             {
-                writer.Write(vertex.X);
-                writer.Write(vertex.Y);
+                SpanStream.Write(data, ref offset, vertex.X);
+                SpanStream.Write(data, ref offset, vertex.Y);
             }
-            
-            writer.Flush();
-            return stream.ToArray();
+
+            return data;
         }
     }
 }

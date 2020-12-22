@@ -49,7 +49,7 @@ namespace Auxephyr.IdTech.Tech1
             // Header section.
             
             var id = (WadType) reader.ReadInt32();
-            Assert.IsDefinedIn<WadType>(id, "ID must be either IWAD or PWAD.");
+            Assert.IsDefinedIn<WadType>(id);
             _log.Write($"WAD type is {id}.");
 
             var entryCount = reader.ReadInt32();
@@ -171,7 +171,7 @@ namespace Auxephyr.IdTech.Tech1
         {
             Assert.IsNotNull(stream, "Stream must not be null.");
             Assert.That(() => stream.CanWrite, "Stream must be writeable.");
-            Assert.IsDefinedIn<WadType>(wad.Type, "ID must be either IWAD or PWAD.");
+            Assert.IsDefinedIn<WadType>(wad.Type);
             
             var writer = new BinaryWriter(stream);
             writer.Write((int) wad.Type);

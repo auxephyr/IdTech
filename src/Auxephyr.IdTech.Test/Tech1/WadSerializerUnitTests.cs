@@ -36,8 +36,8 @@ namespace Auxephyr.IdTech.Tech1
 
             var directory = new List<WadEntry>
             {
-                new WadEntry {Name = "A", Offset = 0x0000000C, Length = 0x00000004},
-                new WadEntry {Name = "B", Offset = 0x00000010, Length = 0x00000008}
+                new() {Name = "A", Offset = 0x0000000C, Length = 0x00000004},
+                new() {Name = "B", Offset = 0x00000010, Length = 0x00000008}
             };
 
             entrySerializerMock.Setup(x => x.ReadStream(It.IsAny<Stream>(), It.IsAny<int>()))
@@ -48,8 +48,8 @@ namespace Auxephyr.IdTech.Tech1
                 Type = WadType.Iwad,
                 Lumps = new List<Lump>
                 {
-                    new Lump {Name = "A", Data = new byte[] {0x01, 0x02, 0x03, 0x04}},
-                    new Lump {Name = "B", Data = new byte[] {0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C}}
+                    new() {Name = "A", Data = new byte[] {0x01, 0x02, 0x03, 0x04}},
+                    new() {Name = "B", Data = new byte[] {0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C}}
                 }
             };
 

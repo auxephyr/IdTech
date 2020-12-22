@@ -11,7 +11,7 @@ namespace Auxephyr.IdTech.Tech1
 
         public Lump Clone()
         {
-            return new Lump
+            return new()
             {
                 Name = Name,
                 Data = Data?.ToArray()

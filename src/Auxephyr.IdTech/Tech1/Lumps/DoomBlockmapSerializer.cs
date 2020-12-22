@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using Auxephyr.IdTech.Infrastructure;
 using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
@@ -8,42 +9,40 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     {
         public static IDoomBlockmapSerializer Default { get; } = new DoomBlockmapSerializer();
 
-        public List<DoomBlock> Decode(byte[] data)
+        public List<DoomBlock> Decode(ReadOnlySpan<byte> data)
         {
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
             var count = data.Length / 8;
             var result = new List<DoomBlock>(count);
+            var offset = 0;
 
             for (var i = 0; i < count; i++)
             {
                 result.Add(new DoomBlock
                 {
-                    X = reader.ReadInt16(),
-                    Y = reader.ReadInt16(),
-                    Width = reader.ReadInt16(),
-                    Height = reader.ReadInt16()
+                    X = SpanStream.ReadInt16(data, ref offset),
+                    Y = SpanStream.ReadInt16(data, ref offset),
+                    Width = SpanStream.ReadInt16(data, ref offset),
+                    Height = SpanStream.ReadInt16(data, ref offset)
                 });
             }
 
             return result;
         }
 
-        public byte[] Encode(IEnumerable<DoomBlock> blocks)
+        public byte[] Encode(ICollection<DoomBlock> blocks)
         {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
-
+            var data = new byte[blocks.Count * 8];
+            var offset = 0;
+            
             foreach (var block in blocks)
             {
-                writer.Write(block.X);
-                writer.Write(block.Y);
-                writer.Write(block.Width);
-                writer.Write(block.Height);
+                SpanStream.Write(data, ref offset, block.X);
+                SpanStream.Write(data, ref offset, block.Y);
+                SpanStream.Write(data, ref offset, block.Width);
+                SpanStream.Write(data, ref offset, block.Height);
             }
 
-            writer.Flush();
-            return stream.ToArray();
+            return data;
         }
     }
 }

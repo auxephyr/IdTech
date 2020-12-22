@@ -9,7 +9,6 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     public class DoomMapSerializer : IDoomMapSerializer
     {
         private readonly IDoomBlockmapSerializer _doomBlockmapSerializer;
-        private readonly IMapGroupSerializer _mapGroupSerializer;
         private readonly IDoomLinedefsSerializer _doomLinedefsSerializer;
         private readonly IDoomThingsSerializer _doomThingsSerializer;
         private readonly IDoomSidedefsSerializer _doomSidedefsSerializer;
@@ -30,23 +29,8 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             DoomNodesSerializer.Default,
             DoomSectorsSerializer.Default,
             DoomRejectSerializer.Default,
-            DoomBlockmapSerializer.Default,
-            MapGroupSerializer.Default
+            DoomBlockmapSerializer.Default
         );
-
-        private static string[] MapLumpNames =
-        {
-            LumpNames.Things,
-            LumpNames.Linedefs,
-            LumpNames.Sidedefs,
-            LumpNames.Vertexes,
-            LumpNames.Segs,
-            LumpNames.Ssectors,
-            LumpNames.Nodes,
-            LumpNames.Sectors,
-            LumpNames.Reject,
-            LumpNames.Blockmap
-        };
 
         public DoomMapSerializer(
             IDoomThingsSerializer doomThingsSerializer,
@@ -58,11 +42,9 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             IDoomNodesSerializer doomNodesSerializer,
             IDoomSectorsSerializer doomSectorsSerializer,
             IDoomRejectSerializer doomRejectSerializer,
-            IDoomBlockmapSerializer doomBlockmapSerializer,
-            IMapGroupSerializer mapGroupSerializer)
+            IDoomBlockmapSerializer doomBlockmapSerializer)
         {
             _doomBlockmapSerializer = doomBlockmapSerializer;
-            _mapGroupSerializer = mapGroupSerializer;
             _doomLinedefsSerializer = doomLinedefsSerializer;
             _doomThingsSerializer = doomThingsSerializer;
             _doomSidedefsSerializer = doomSidedefsSerializer;
@@ -139,7 +121,8 @@ namespace Auxephyr.IdTech.Tech1.Lumps
                 SubSectors = ssectorsLump == default ? default : _doomSsectorsSerializer.Decode(ssectorsLump.Data),
                 Nodes = nodesLump == default ? default : _doomNodesSerializer.Decode(nodesLump.Data),
                 Sectors = sectorsLump?.Data == default ? default : _doomSectorsSerializer.Decode(sectorsLump.Data),
-                Rejects = rejectLump?.Data == default ? default : _doomRejectSerializer.Decode(rejectLump.Data),
+                Rejects = rejectLump?.Data == default || sectorsLump?.Data == default 
+                    ? default : _doomRejectSerializer.Decode(rejectLump.Data, sectorsLump.Data.Length / 26),
                 Blocks = blockMapLump?.Data == default ? default : _doomBlockmapSerializer.Decode(blockMapLump.Data)
             };
         }
@@ -166,8 +149,8 @@ namespace Auxephyr.IdTech.Tech1.Lumps
                 result.Add(new Lump {Name = LumpNames.Nodes, Data = _doomNodesSerializer.Encode(map.Nodes)});
             if (map.Sectors != null)
                 result.Add(new Lump {Name = LumpNames.Sectors, Data = _doomSectorsSerializer.Encode(map.Sectors)});
-            if (map.Rejects != null)
-                result.Add(new Lump {Name = LumpNames.Reject, Data = _doomRejectSerializer.Encode(map.Rejects)});
+            if (map.Rejects != null && map.Sectors != null)
+                result.Add(new Lump {Name = LumpNames.Reject, Data = _doomRejectSerializer.Encode(map.Rejects, map.Sectors.Count)});
             if (map.Blocks != null)
                 result.Add(new Lump {Name = LumpNames.Blockmap, Data = _doomBlockmapSerializer.Encode(map.Blocks)});
 

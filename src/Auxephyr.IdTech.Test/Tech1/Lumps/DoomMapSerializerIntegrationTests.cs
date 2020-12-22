@@ -10,7 +10,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     public class DoomMapSerializerIntegrationTests : IdTechTestBase
     {
         [Test]
-        public void Test1()
+        public void DoomSharewareSmokeTests()
         {
             using var zipStream = OpenData("doom1.zip");
             using var zipArchive = new ZipArchive(zipStream);
@@ -24,8 +24,16 @@ namespace Auxephyr.IdTech.Tech1.Lumps
 
             var lumps = mapGroupSerializer.Read(wad.Lumps, mapSerializer.GetLumpNames(mapNames.First()));
             var map = mapSerializer.Decode(lumps);
-            map.Blocks.Should().HaveCount(865);
+            map.Things.Should().HaveCount(138);
             map.Linedefs.Should().HaveCount(475);
+            map.Sidedefs.Should().HaveCount(648);
+            map.Vertices.Should().HaveCount(467);
+            map.Segs.Should().HaveCount(732);
+            map.SubSectors.Should().HaveCount(237);
+            map.Nodes.Should().HaveCount(236);
+            map.Sectors.Should().HaveCount(85);
+            map.Rejects.Should().HaveCount(942);
+            map.Blocks.Should().HaveCount(865);
         }
     }
 }

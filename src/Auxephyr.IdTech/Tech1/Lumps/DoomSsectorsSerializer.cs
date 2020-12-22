@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using Auxephyr.IdTech.Infrastructure;
 using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
@@ -8,38 +9,36 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     {
         public static IDoomSsectorsSerializer Default { get; } = new DoomSsectorsSerializer();
 
-        public List<DoomSubSector> Decode(byte[] data)
+        public List<DoomSubSector> Decode(ReadOnlySpan<byte> data)
         {
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
             var count = data.Length / 4;
-            var result = new List<DoomSubSector>();
+            var result = new List<DoomSubSector>(count);
+            var offset = 0;
 
             for (var i = 0; i < count; i++)
             {
                 result.Add(new DoomSubSector
                 {
-                    SegCount = reader.ReadInt16(),
-                    StartSeg = reader.ReadInt16()
+                    SegCount = SpanStream.ReadInt16(data, ref offset),
+                    StartSeg = SpanStream.ReadInt16(data, ref offset)
                 });
             }
 
             return result;
         }
 
-        public byte[] Encode(IEnumerable<DoomSubSector> subSectors)
+        public byte[] Encode(ICollection<DoomSubSector> subSectors)
         {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
+            var data = new byte[subSectors.Count * 4];
+            var offset = 0;
 
             foreach (var subSector in subSectors)
             {
-                writer.Write(subSector.SegCount);
-                writer.Write(subSector.StartSeg);
+                SpanStream.Write(data, ref offset, subSector.SegCount);
+                SpanStream.Write(data, ref offset, subSector.StartSeg);
             }
 
-            writer.Flush();
-            return stream.ToArray();
+            return data;
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Auxephyr.IdTech.Infrastructure;
 using Auxephyr.IdTech.Tech1.Models;
 
 namespace Auxephyr.IdTech.Tech1.Lumps
@@ -7,49 +9,47 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     public class DoomLinedefsSerializer : IDoomLinedefsSerializer
     {
         public static IDoomLinedefsSerializer Default { get; } = new DoomLinedefsSerializer();
-        
-        public List<DoomLinedef> Decode(byte[] data)
+
+        public List<DoomLinedef> Decode(ReadOnlySpan<byte> data)
         {
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
+            var offset = 0;
             var count = data.Length / 14;
-            var result = new List<DoomLinedef>();
+            var result = new List<DoomLinedef>(count);
 
             for (var i = 0; i < count; i++)
             {
                 result.Add(new DoomLinedef
                 {
-                    StartVertex = reader.ReadInt16(),
-                    EndVertex = reader.ReadInt16(),
-                    Flags = (DoomLinedefFlags) reader.ReadInt16(),
-                    Special = (DoomLinedefSpecial) reader.ReadInt16(),
-                    Tag = reader.ReadInt16(),
-                    RightSidedef = reader.ReadInt16(),
-                    LeftSidedef = reader.ReadInt16()
+                    StartVertex = SpanStream.ReadInt16(data, ref offset),
+                    EndVertex = SpanStream.ReadInt16(data, ref offset),
+                    Flags = (DoomLinedefFlags) SpanStream.ReadInt16(data, ref offset),
+                    Special = (DoomLinedefSpecial) SpanStream.ReadInt16(data, ref offset),
+                    Tag = SpanStream.ReadInt16(data, ref offset),
+                    RightSidedef = SpanStream.ReadInt16(data, ref offset),
+                    LeftSidedef = SpanStream.ReadInt16(data, ref offset)
                 });
             }
 
             return result;
         }
 
-        public byte[] Encode(IEnumerable<DoomLinedef> linedefs)
+        public byte[] Encode(ICollection<DoomLinedef> linedefs)
         {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
+            var data = new byte[linedefs.Count * 14];
+            var offset = 0;
 
             foreach (var linedef in linedefs)
             {
-                writer.Write(linedef.StartVertex);
-                writer.Write(linedef.EndVertex);
-                writer.Write((short) linedef.Flags);
-                writer.Write((short) linedef.Special);
-                writer.Write(linedef.Tag);
-                writer.Write(linedef.RightSidedef);
-                writer.Write(linedef.LeftSidedef);
+                SpanStream.Write(data, ref offset, linedef.StartVertex);
+                SpanStream.Write(data, ref offset, linedef.EndVertex);
+                SpanStream.Write(data, ref offset, (short) linedef.Flags);
+                SpanStream.Write(data, ref offset, (short) linedef.Special);
+                SpanStream.Write(data, ref offset, linedef.Tag);
+                SpanStream.Write(data, ref offset, linedef.RightSidedef);
+                SpanStream.Write(data, ref offset, linedef.LeftSidedef);
             }
-            
-            writer.Flush();
-            return stream.ToArray();
+
+            return data;
         }
     }
 }
