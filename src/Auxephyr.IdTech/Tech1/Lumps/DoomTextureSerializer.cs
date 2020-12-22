@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Auxephyr.IdTech.Infrastructure;
 using Auxephyr.IdTech.Tech1.Models;
 
@@ -53,25 +54,33 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             return result;
         }
 
-        public byte[] Encode(ICollection<DoomTexture> subSectors)
+        public byte[] Encode(ICollection<DoomTexture> textures)
         {
-            // var data = new byte[subSectors.Count * 4];
-            // var offset = 0;
-            //
-            // foreach (var subSector in subSectors)
-            // {
-            //     SpanStream.Write(data, ref offset, subSector.SegCount);
-            //     SpanStream.Write(data, ref offset, subSector.StartSeg);
-            // }
-            //
-            // return data;
-            throw new NotImplementedException();
-        }
-    }
+            var data = new byte[textures.Sum(t => 22 + t.Patches.Count * 10)];
+            var offset = 0;
 
-    public interface IDoomTextureSerializer
-    {
-        List<DoomTexture> Decode(ReadOnlySpan<byte> data);
-        byte[] Encode(ICollection<DoomTexture> blocks);
+            foreach (var texture in textures)
+            {
+                SpanStream.Write(data, ref offset, Cp437.Pad(Cp437.Encode(texture.Name), 8));
+                SpanStream.Write(data, ref offset, texture.Reserved0);
+                SpanStream.Write(data, ref offset, texture.Reserved1);
+                SpanStream.Write(data, ref offset, texture.Width);
+                SpanStream.Write(data, ref offset, texture.Height);
+                SpanStream.Write(data, ref offset, texture.Reserved4);
+                SpanStream.Write(data, ref offset, texture.Reserved5);
+                SpanStream.Write(data, ref offset, (short) texture.Patches.Count);
+
+                foreach (var patch in texture.Patches)
+                {
+                    SpanStream.Write(data, ref offset, patch.X);
+                    SpanStream.Write(data, ref offset, patch.Y);
+                    SpanStream.Write(data, ref offset, patch.PNameIndex);
+                    SpanStream.Write(data, ref offset, patch.StepDir);
+                    SpanStream.Write(data, ref offset, patch.ColorMap);
+                }
+            }
+
+            return data;
+        }
     }
 }
