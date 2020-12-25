@@ -3,7 +3,7 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Flags]
-    public enum DoomLinedefFlags : short
+    public enum HexenLinedefFlags : short
     {
         Impassible = 0x1,
         BlockMonsters = 0x2,
@@ -13,6 +13,9 @@ namespace Auxephyr.IdTech.Tech1.Models
         Secret = 0x20,
         BlockSound = 0x40,
         NotOnMap = 0x80,
-        AlwaysOnMap = 0x100
+        AlwaysOnMap = 0x100,
+        Repeatable = 0x200,
+        ActivateByPlayerAndMonster = 0x2000,
+        BlockEverything = unchecked((short) 0x8000)
     }
 }

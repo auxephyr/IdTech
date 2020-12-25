@@ -3,7 +3,7 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Model]
-    public struct DoomSector
+    public class DoomSector
     {
         public short FloorHeight;
         public short CeilingHeight;

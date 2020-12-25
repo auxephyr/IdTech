@@ -10,15 +10,32 @@ namespace Auxephyr.IdTech.Tech1.Lumps
     {
         public static IDoomTextureSerializer Default { get; } = new DoomTextureSerializer();
 
+        public List<string> GetTextureLumpNames(IEnumerable<Lump> lumps)
+        {
+            return lumps
+                .Where(l => l.Name != null &&
+                            l.Name.Length > 7 &&
+                            char.IsDigit(l.Name[7]) &&
+                            l.Name.StartsWith("TEXTURE", StringComparison.InvariantCultureIgnoreCase))
+                .Select(l => l.Name)
+                .ToList();
+        }
+
         public List<DoomTexture> Decode(ReadOnlySpan<byte> data)
         {
             var result = new List<DoomTexture>();
             var offset = 0;
-            var maxTextureOffset = data.Length - 20;
-            var maxPatchOffset = data.Length - 10;
+            var count = SpanStream.ReadInt32(data, ref offset);
+            var offsets = new int[count];
+            var index = 0;
 
-            while (offset < maxTextureOffset)
+            for (index = 0; index < count; index++)
+                offsets[index] = SpanStream.ReadInt32(data, ref offset);
+
+            for (index = 0; index < count; index++)
             {
+                offset = offsets[index];
+
                 var texture = new DoomTexture
                 {
                     Name = Cp437.Decode(Cp437.UnPad(SpanStream.ReadBytes(data, ref offset, 8))),
@@ -33,7 +50,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
                 var patchCount = SpanStream.ReadInt16(data, ref offset);
                 var patches = new List<DoomPatch>();
 
-                for (var j = 0; j < patchCount && offset < maxPatchOffset; j++)
+                for (var j = 0; j < patchCount; j++)
                 {
                     var patch = new DoomPatch
                     {
@@ -43,7 +60,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
                         StepDir = SpanStream.ReadInt16(data, ref offset),
                         ColorMap = SpanStream.ReadInt16(data, ref offset)
                     };
-                    
+
                     patches.Add(patch);
                 }
 
@@ -56,11 +73,16 @@ namespace Auxephyr.IdTech.Tech1.Lumps
 
         public byte[] Encode(ICollection<DoomTexture> textures)
         {
-            var data = new byte[textures.Sum(t => 22 + t.Patches.Count * 10)];
+            var data = new byte[4 + textures.Sum(t => 26 + t.Patches.Count * 10)];
             var offset = 0;
+            var tableOffset = 0;
+
+            SpanStream.Write(data, ref tableOffset, textures.Count);
 
             foreach (var texture in textures)
             {
+                SpanStream.Write(data, ref tableOffset, offset);
+
                 SpanStream.Write(data, ref offset, Cp437.Pad(Cp437.Encode(texture.Name), 8));
                 SpanStream.Write(data, ref offset, texture.Reserved0);
                 SpanStream.Write(data, ref offset, texture.Reserved1);

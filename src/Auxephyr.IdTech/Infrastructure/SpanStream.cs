@@ -21,6 +21,15 @@ namespace Auxephyr.IdTech.Infrastructure
             return unchecked((short) value);
         }
 
+        public static int ReadInt32(ReadOnlySpan<byte> span, ref int offset)
+        {
+            int value = span[offset++];
+            value |= span[offset++] << 8;
+            value |= span[offset++] << 16;
+            value |= span[offset++] << 24;
+            return value;
+        }
+
         public static byte[] ReadBytes(ReadOnlySpan<byte> span, ref int offset, int length)
         {
             var buffer = new byte[length];
@@ -38,6 +47,14 @@ namespace Auxephyr.IdTech.Infrastructure
         {
             span[offset++] = unchecked((byte) value);
             span[offset++] = unchecked((byte) (value >> 8));
+        }
+
+        public static void Write(Span<byte> span, ref int offset, int value)
+        {
+            span[offset++] = unchecked((byte) value);
+            span[offset++] = unchecked((byte) (value >> 8));
+            span[offset++] = unchecked((byte) (value >> 16));
+            span[offset++] = unchecked((byte) (value >> 24));
         }
 
         public static void Write(Span<byte> span, ref int offset, ReadOnlySpan<byte> value)

@@ -15,6 +15,12 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             var subject = Create<DoomTextureSerializer>();
             var data = new byte[]
             {
+                // header
+                
+                0x02, 0x00, 0x00, 0x00,
+                0x0C, 0x00, 0x00, 0x00,
+                0x36, 0x00, 0x00, 0x00,
+                
                 // texture 1 "ABC"
 
                 0x41, 0x42, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00,

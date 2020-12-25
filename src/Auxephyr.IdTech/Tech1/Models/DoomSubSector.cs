@@ -3,7 +3,7 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Model]
-    public struct DoomSubSector
+    public class DoomSubSector
     {
         public short SegCount;
         public short StartSeg;

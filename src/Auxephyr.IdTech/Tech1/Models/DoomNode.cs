@@ -3,7 +3,7 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Model]
-    public struct DoomNode
+    public class DoomNode
     {
         public short X;
         public short Y;

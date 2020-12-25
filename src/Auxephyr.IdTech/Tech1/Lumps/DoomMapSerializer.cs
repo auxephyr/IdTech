@@ -74,7 +74,7 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             };
         }
 
-        public List<string> GetAllMapNames(IEnumerable<Lump> lumps)
+        public List<string> GetMapLumpNames(IEnumerable<Lump> lumps)
         {
             return lumps.Select(l => l.Name).Where(IsMapName)
                 .ToList();

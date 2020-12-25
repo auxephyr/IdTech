@@ -1,3 +1,18 @@
 [submodule "lib/Saxxon.Common"]
 	path = lib/Saxxon.Common
 	url = git@github.com:SaxxonPike/Saxxon.Common.git
+[submodule "lib/heretic"]
+	path = lib/heretic
+	url = git@github.com:OpenSourcedGames/Heretic.git
+[submodule "lib/hexen"]
+	path = lib/hexen
+	url = git@github.com:OpenSourcedGames/Hexen.git
+[submodule "lib/doom"]
+	path = lib/doom
+	url = git@github.com:OpenSourcedGames/DOOM.git
+[submodule "lib/quake"]
+	path = lib/quake
+	url = git@github.com:OpenSourcedGames/Quake.git
+[submodule "lib/wolf3d"]
+	path = lib/wolf3d
+	url = git@github.com:id-Software/wolf3d.git

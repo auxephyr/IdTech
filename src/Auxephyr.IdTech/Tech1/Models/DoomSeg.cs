@@ -3,7 +3,7 @@
 namespace Auxephyr.IdTech.Tech1.Models
 {
     [Model]
-    public struct DoomSeg
+    public class DoomSeg
     {
         public short StartVertex;
         public short EndVertex;

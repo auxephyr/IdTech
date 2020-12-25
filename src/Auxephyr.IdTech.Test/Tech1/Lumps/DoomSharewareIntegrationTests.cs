@@ -7,10 +7,10 @@ using NUnit.Framework;
 namespace Auxephyr.IdTech.Tech1.Lumps
 {
     [TestFixture]
-    public class DoomMapSerializerIntegrationTests : IdTechTestBase
+    public class DoomSharewareIntegrationTests : IdTechTestBase
     {
         [Test]
-        public void DoomSharewareSmokeTests()
+        public void TestMaps()
         {
             using var zipStream = OpenData("doom1.zip");
             using var zipArchive = new ZipArchive(zipStream);
@@ -18,11 +18,10 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             var wad = WadSerializer.Default.ReadStream(wadStream);
 
             var mapSerializer = DoomMapSerializer.Default;
-            var mapGroupSerializer = MapGroupSerializer.Default;
-            var mapNames = mapSerializer.GetAllMapNames(wad.Lumps);
+            var mapNames = mapSerializer.GetMapLumpNames(wad.Lumps);
             mapNames.Should().BeEquivalentTo("E1M1", "E1M2", "E1M3", "E1M4", "E1M5", "E1M6", "E1M7", "E1M8", "E1M9");
 
-            var lumps = mapGroupSerializer.Read(wad.Lumps, mapSerializer.GetLumpNames(mapNames.First()));
+            var lumps = wad.ReadLumpGroup(mapSerializer.GetLumpNames("E1M1"));
             var map = mapSerializer.Decode(lumps);
             map.Things.Should().HaveCount(138);
             map.Linedefs.Should().HaveCount(475);
@@ -34,6 +33,20 @@ namespace Auxephyr.IdTech.Tech1.Lumps
             map.Sectors.Should().HaveCount(85);
             map.Rejects.Should().HaveCount(942);
             map.Blocks.Should().HaveCount(865);
+        }
+
+        [Test]
+        public void TestTextures()
+        {
+            using var zipStream = OpenData("doom1.zip");
+            using var zipArchive = new ZipArchive(zipStream);
+            using var wadStream = zipArchive.Entries.Single().Open();
+            var wad = WadSerializer.Default.ReadStream(wadStream).AsDoom();
+
+            var textures = wad.LoadTextures();
+            textures.Keys.Should().BeEquivalentTo("TEXTURE1");
+            textures["TEXTURE1"].Should().HaveCount(125);
+            textures["TEXTURE1"].First().Name.Should().Be("AASTINKY");
         }
     }
 }
